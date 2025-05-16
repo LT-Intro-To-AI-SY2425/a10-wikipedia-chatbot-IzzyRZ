@@ -89,8 +89,8 @@ def get_polar_radius(planet_name: str) -> str:
     pattern = r"(?:Polar radius.*?)(?: ?[\d]+ )?(?P<radius>[\d,.]+)(?:.*?)km"
     error_text = "Page infobox has no polar radius information"
     match = get_match(infobox_text, pattern, error_text)
-
-    return match.group("radius")
+    radiusInfo = f"the polar radius of {planet_name} is {match.group('radius')} km"
+    return radiusInfo
 
 
 def get_birth_date(name: str) -> str:
@@ -108,9 +108,8 @@ def get_birth_date(name: str) -> str:
         "Page infobox has no birth information (at least none in xxxx-xx-xx format)"
     )
     match = get_match(infobox_text, pattern, error_text)
-
-    return match.group("birth")
-
+    birthInfo = f"{name} was born on this date: {match.group('birth')}"
+    return birthInfo
 
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
@@ -184,7 +183,7 @@ def search_pa_list(src: List[str]) -> List[str]:
 def query_loop() -> None:
     """The simple query loop. The try/except structure is to catch Ctrl-C or Ctrl-D
     characters and exit gracefully"""
-    print("Welcome to the movie database!\n")
+    print("Welcome to the wikipedia database!\n")
     while True:
         try:
             print()
