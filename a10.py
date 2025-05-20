@@ -111,6 +111,33 @@ def get_birth_date(name: str) -> str:
     birthInfo = f"{name} was born on this date: {match.group('birth')}"
     return birthInfo
 
+def get_population_size(place: str) -> str:
+    """Gets the population size of the given place
+    
+    Args: 
+        place - name of the place
+        
+    Returns:
+        population size of the given place
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(place)))
+    pattern = r"Population\D+d{4}\D+(?P<Population>[\d,]+)"
+    error_text = (
+        "Page infobox has no population information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+    popInfo = f"{place} has a population of {match.group('Population')}"
+    return popInfo
+    
+def get_establish_year(thing: str) -> str:
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(thing)))
+    pattern = r"Established[\n\s]*(?P<Year>\d{4})"
+    error_text = (
+        "Page infobox has no establishment information (at least not in the 'established' format"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+    estInfo = f"{thing} was established in {match.group('Year')}"
+    return estInfo
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
 # list of the answer(s) and not just the answer itself.
@@ -139,6 +166,8 @@ def polar_radius(matches: List[str]) -> List[str]:
     """
     return [get_polar_radius(matches[0])]
 
+def population_size(matches: List[str]) -> List[str]:
+    return [get_population_size(matches[0])]
 
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
