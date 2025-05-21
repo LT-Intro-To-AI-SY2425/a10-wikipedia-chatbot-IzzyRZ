@@ -121,7 +121,8 @@ def get_population_size(place: str) -> str:
         population size of the given place
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(place)))
-    pattern = r"Population\D+d{4}\D+(?P<Population>[\d,]+)"
+    print(infobox_text)
+    pattern = r"Population\D+\d{4}\D+(?P<Population>[\d,]+)" 
     error_text = (
         "Page infobox has no population information"
     )
@@ -131,6 +132,7 @@ def get_population_size(place: str) -> str:
     
 def get_establish_year(thing: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(thing)))
+    print(infobox_text)
     pattern = r"Established[\n\s]*(?P<Year>\d{4})"
     error_text = (
         "Page infobox has no establishment information (at least not in the 'established' format)"
@@ -141,6 +143,7 @@ def get_establish_year(thing: str) -> str:
 
 def get_ugrad_pop(school: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(school)))
+    print(infobox_text)
     pattern = r"Undergraduates[\n\s]*(?P<Ugrad>[\d,]+)"
     error_text = (
         "Page infobox has no information on undergraduate population"
@@ -180,10 +183,10 @@ def polar_radius(matches: List[str]) -> List[str]:
 def population_size(matches: List[str]) -> List[str]:
     return [get_population_size(matches[0])]
 
-def establish_year(matches: List(str)) -> List[str]:
+def establish_year(matches: List[str]) -> List[str]:
     return [get_establish_year(matches[0])]
 
-def ugrad_pop(matches: List(str)) -> List[str]:
+def ugrad_pop(matches: List[str]) -> List[str]:
     return [get_ugrad_pop(matches[0])]
 
 # dummy argument is ignored and doesn't matter
@@ -241,7 +244,7 @@ def query_loop() -> None:
             for ans in answers:
                 print(ans)
 
-        except (KeyboardInterrupt, EOFError):
+        except (KeyboardInterrupt, EOFError, AttributeError):
             break
 
     print("\nSo long!\n")
