@@ -133,11 +133,22 @@ def get_establish_year(thing: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(thing)))
     pattern = r"Established[\n\s]*(?P<Year>\d{4})"
     error_text = (
-        "Page infobox has no establishment information (at least not in the 'established' format"
+        "Page infobox has no establishment information (at least not in the 'established' format)"
     )
     match = get_match(infobox_text, pattern, error_text)
     estInfo = f"{thing} was established in {match.group('Year')}"
     return estInfo
+
+def get_ugrad_pop(school: str) -> str:
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(school)))
+    pattern = r"Undergraduates[\n\s]*(?P<Ugrad>[\d,]+)"
+    error_text = (
+        "Page infobox has no information on undergraduate population"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+    ugradInfo = f"{school} has an undergraduate population of {match.group('Ugrad')}"
+    return ugradInfo
+    
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
 # list of the answer(s) and not just the answer itself.
@@ -168,6 +179,12 @@ def polar_radius(matches: List[str]) -> List[str]:
 
 def population_size(matches: List[str]) -> List[str]:
     return [get_population_size(matches[0])]
+
+def establish_year(matches: List(str)) -> List[str]:
+    return [get_establish_year(matches[0])]
+
+def ugrad_pop(matches: List(str)) -> List[str]:
+    return [get_ugrad_pop(matches[0])]
 
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
