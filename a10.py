@@ -201,6 +201,9 @@ Action = Callable[[List[str]], List[Any]]
 pa_list: List[Tuple[Pattern, Action]] = [
     ("when was % born".split(), birth_date),
     ("what is the polar radius of %".split(), polar_radius),
+    ("what is the population of %".split(), population_size),
+    ("what year was % established".split(), establish_year),
+    ("what is the undergraduate population of %".split(), ugrad_pop),
     (["bye"], bye_action),
 ]
 
