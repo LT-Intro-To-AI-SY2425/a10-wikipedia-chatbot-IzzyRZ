@@ -122,7 +122,7 @@ def get_population_size(place: str) -> str:
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(place)))
     print(infobox_text)
-    pattern = r"Population\D+\d{4}\D+(?P<Population>[\d,]+)" 
+    pattern = r"Population\D+\d{4}[)\[\]\d]*\D+(?P<Population>[\d,]+)" 
     error_text = (
         "Page infobox has no population information"
     )
@@ -133,12 +133,12 @@ def get_population_size(place: str) -> str:
 def get_establish_year(thing: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(thing)))
     print(infobox_text)
-    pattern = r"Established[\n\s]*(?P<Year>\d{4})"
+    pattern = r"Established[\n\s]*(?P<time>[\d\w\s,]+)[;\(]+"
     error_text = (
         "Page infobox has no establishment information (at least not in the 'established' format)"
     )
     match = get_match(infobox_text, pattern, error_text)
-    estInfo = f"{thing} was established in {match.group('Year')}"
+    estInfo = f"{thing} was established in {match.group('time')}"
     return estInfo
 
 def get_ugrad_pop(school: str) -> str:
@@ -204,6 +204,7 @@ Action = Callable[[List[str]], List[Any]]
 pa_list: List[Tuple[Pattern, Action]] = [
     ("when was % born".split(), birth_date),
     ("what is the polar radius of %".split(), polar_radius),
+    ("When was % established".split(), population_size),
     ("what is the population of %".split(), population_size),
     ("what year was % established".split(), establish_year),
     ("what is the undergraduate population of %".split(), ugrad_pop),
@@ -244,8 +245,10 @@ def query_loop() -> None:
             for ans in answers:
                 print(ans)
 
-        except (KeyboardInterrupt, EOFError, AttributeError):
+        except (KeyboardInterrupt, EOFError):
             break
+        except(AttributeError):
+            print("Page does not match pattern!")
 
     print("\nSo long!\n")
 
